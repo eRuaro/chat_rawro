@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "726675913681",
+    "project_id": "rawro-chat",
+    "storage_bucket": "rawro-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726675913681:android:9854461298a671c287bef0",
+        "android_client_info": {
+          "package_name": "com.rawro.chat_rawro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "726675913681-0mpppu72frbhtt52i30rbqh07drng91a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdMaMM2FbAOvQNuuTJcj7vtl0EnqcXCGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "726675913681-0mpppu72frbhtt52i30rbqh07drng91a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726675913681:android:5931dfd11c4188c587bef0",
+        "android_client_info": {
+          "package_name": "com.rawro.rawro_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "726675913681-0mpppu72frbhtt52i30rbqh07drng91a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdMaMM2FbAOvQNuuTJcj7vtl0EnqcXCGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "726675913681-0mpppu72frbhtt52i30rbqh07drng91a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
