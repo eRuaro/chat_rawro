@@ -3,6 +3,9 @@
 *.ap_
 *.aab
 
+#dart_tool files
+.dart_tool/
+
 # Files for the ART/Dalvik VM
 *.dex
 
