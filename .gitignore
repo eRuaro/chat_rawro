@@ -3,11 +3,6 @@
 *.ap_
 *.aab
 
-#dart_tool files
-.dart_tool/
-.packages
-pubspec.lock
- # Except for application packages
 # Files for the ART/Dalvik VM
 *.dex
 
@@ -86,3 +81,9 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+#dart_tool files
+.dart_tool/
+.packages
+pubspec.lock
+ # Except for application packages
