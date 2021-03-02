@@ -15,6 +15,7 @@ class RawroChat extends StatelessWidget {
           bodyText2: TextStyle(color: Colors.black54),
         ),
       ),
+      debugShowCheckedModeBanner: false,
       home: WelcomeScreen(),
       initialRoute: WelcomeScreen.id,
       routes: {

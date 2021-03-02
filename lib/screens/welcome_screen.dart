@@ -79,7 +79,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 TypewriterAnimatedTextKit(
                   //Loading indicator -> 0% - 100%
                   //'${controller.value.toInt()}%',
-                  text: ['Flash Chat'],
+                  text: ['Rawro Chat'],
                   textStyle: TextStyle(
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
