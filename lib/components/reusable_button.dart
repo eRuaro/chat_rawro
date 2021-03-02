@@ -5,7 +5,7 @@ class ReusableButton extends StatelessWidget {
   ReusableButton({@required this.onPress, this.text, this.color});
 
 
-  final Function onPress;
+  final void Function() onPress;
   final String text;
   final Color color;
 
