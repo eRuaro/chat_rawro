@@ -1,9 +1,10 @@
+import 'package:chat_rawro/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_rawro/components/reusable_button.dart';
 import 'package:chat_rawro/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegistrationScreen extends StatefulWidget {
-
   static const String id = 'registration_screen';
 
   @override
@@ -11,6 +12,12 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  String email;
+  String password;
+
+  //Authentication
+  final _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,8 +39,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               height: 48.0,
             ),
             TextField(
+              textAlign: TextAlign.center,
+              //Changes keyboard appearance
+              keyboardType: TextInputType.emailAddress,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 24,
+              ),
               onChanged: (value) {
                 //Do something with the user input.
+                email = value;
               },
               decoration: kHintText.copyWith(
                 hintText: 'Enter your email',
@@ -43,8 +58,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               height: 8.0,
             ),
             TextField(
+              textAlign: TextAlign.center,
+              //Password
+              obscureText: true,
+              keyboardType: TextInputType.visiblePassword,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 24,
+              ),
               onChanged: (value) {
                 //Do something with the user input.
+                password = value;
               },
               decoration: kHintText.copyWith(
                 hintText: 'Enter your password',
@@ -55,8 +79,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             ReusableButton(
               text: 'Register',
-              onPress: () {
+              onPress: () async {
+                // print(email);
+                // print(password);
 
+                //Creates a new user
+                try {
+                  final newUser = await _auth.createUserWithEmailAndPassword(
+                    email: email,
+                    password: password,
+                  );
+
+                  if (newUser != null) {
+                    Navigator.pushNamed(context, ChatScreen.id);
+                  }
+                } catch (e) {
+                  print(e);
+                }
               },
               color: Colors.blueAccent,
             ),
