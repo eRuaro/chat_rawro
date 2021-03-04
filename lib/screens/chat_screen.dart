@@ -38,6 +38,29 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  //gives us all documents in a collection
+  // void getMessages() async {
+  //   //messages is collection name
+  //  final messages = await _firestore.collection('messages').get();
+  //
+  //  //grabs document
+  //   for (var message in messages.docs) {
+  //     //prints the key value pair in the documents (indiv messages) of the message collection
+  //     print(message.data());
+  //   }
+  // }
+
+  //Notifies firebase of a new message
+  void messagesStream() async {
+      // Listens to all of the changes of the 'messages' collection
+      await for (var messageStream in _firestore.collection('messages').snapshots()) {
+        for (var message in messageStream.docs) {
+          print(message.data());
+        }
+      }
+      //Developer will be notified of any new changes in the collection
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,6 +109,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           'text': messageText,
                           'sender': loggedInUser.email,
                         });
+
+                        messagesStream();
                     },
                     child: Text(
                       'Send',
