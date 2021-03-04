@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:chat_rawro/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatScreen extends StatefulWidget {
   static const String id = 'chat_screen';
@@ -10,10 +11,14 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+
+  final _firestore = FirebaseFirestore.instance;
+
   final _auth = FirebaseAuth.instance;
 
   User loggedInUser;
 
+  String messageText;
   @override
   void initState() {
     super.initState();
@@ -62,14 +67,26 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20
+                      ),
                       onChanged: (value) {
                         //Do something with the user input.
+                        messageText = value;
                       },
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      //messages is the document name in firestore
+                        _firestore.collection('messages').add({
+                          //text and sender are the types in firestore
+                          'text': messageText,
+                          'sender': loggedInUser.email,
+                        });
+                    },
                     child: Text(
                       'Send',
                       style: kSendButtonTextStyle,
