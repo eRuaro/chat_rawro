@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:chat_rawro/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class ChatScreen extends StatefulWidget {
-
   static const String id = 'chat_screen';
 
   @override
@@ -12,7 +10,6 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-
   final _auth = FirebaseAuth.instance;
 
   User loggedInUser;
@@ -24,32 +21,34 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void getCurrentUser() {
-
     try {
-    final user = _auth.currentUser;
+      final user = _auth.currentUser;
 
-    if (user != null) {
-      loggedInUser = user;
-      print(loggedInUser.email);
+      if (user != null) {
+        loggedInUser = user;
+        print(loggedInUser.email);
       }
     } catch (e) {
       print(e);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: null,
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
-                //Implement logout functionality
+                _auth.signOut();
+                Navigator.pop(context);
               }),
         ],
-        title: Text('⚡️Chat'),
-        backgroundColor: Colors.lightBlueAccent,
+        title: Text('⚡ ️Rawro Chat'),
+        backgroundColor: Colors.blueGrey,
       ),
       body: SafeArea(
         child: Column(
@@ -70,9 +69,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
-                      //Implement send functionality.
-                    },
+                    onPressed: () {},
                     child: Text(
                       'Send',
                       style: kSendButtonTextStyle,
