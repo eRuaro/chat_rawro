@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 final _firestore = FirebaseFirestore.instance;
 
+User loggedInUser;
+
 class ChatScreen extends StatefulWidget {
   static const String id = 'chat_screen';
 
@@ -14,12 +16,9 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-
   final messageTextController = TextEditingController();
 
   final _auth = FirebaseAuth.instance;
-
-  User loggedInUser;
 
   String messageText;
   @override
@@ -54,16 +53,16 @@ class _ChatScreenState extends State<ChatScreen> {
   // }
 
   //Notifies firebase of a new message
-  void messagesStream() async {
-    // Listens to all of the changes of the 'messages' collection
-    await for (var messageStream
-        in _firestore.collection('messages').snapshots()) {
-      for (var message in messageStream.docs) {
-        print(message.data());
-      }
-    }
-    //Developer will be notified of any new changes in the collection
-  }
+  // void messagesStream() async {
+  //   // Listens to all of the changes of the 'messages' collection
+  //   await for (var messageStream
+  //       in _firestore.collection('messages').snapshots()) {
+  //     for (var message in messageStream.docs) {
+  //       print(message.data());
+  //     }
+  //   }
+  //   //Developer will be notified of any new changes in the collection
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +114,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         'sender': loggedInUser.email,
                       });
 
-                      messagesStream();
+                      // messagesStream();
                     },
                     child: Text(
                       'Send',
@@ -136,71 +135,91 @@ class MessageStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return //Query Snapshot comes from cloud firestore
-      StreamBuilder<QuerySnapshot>(
-        //Where the streams will be coming from
-        stream: _firestore.collection('messages').snapshots(),
-        //Rebuilds the widget with the streams
-        //defined in docs -> context, snapshot -> different from firebase snapshot
-        builder: (context, snapshot) {
-          //builds a text widget
-          List<MessageBubble> messageWidgets = [];
+        StreamBuilder<QuerySnapshot>(
+      //Where the streams will be coming from
+      stream: _firestore.collection('messages').snapshots(),
+      //Rebuilds the widget with the streams
+      //defined in docs -> context, snapshot -> different from firebase snapshot
+      builder: (context, snapshot) {
+        //builds a text widget
+        List<MessageBubble> messageWidgets = [];
 
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.lightBlue,
-              ),
-            );
-          }
-          final messages = snapshot.data.docs;
-
-          for (var message in messages) {
-            final messageText = message.data()['text'];
-            final messageSender = message.data()['sender'];
-
-            final messages = MessageBubble(messageSender, messageText);
-
-            messageWidgets.add(messages);
-          }
-          return Expanded(
-            child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              children: messageWidgets,
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.lightBlue,
             ),
           );
-        },
-      );
+        }
+
+        //new texts appear at the bottom
+        final messages = snapshot.data.docs.reversed;
+
+        for (var message in messages) {
+          final messageText = message.data()['text'];
+          final messageSender = message.data()['sender'];
+
+          final currentUser = loggedInUser.email;
+
+          if (currentUser == messageSender) {
+            //messages from current user
+          }
+
+          final messages = MessageBubble(
+            messageSender,
+            messageText,
+            currentUser == messageSender,
+          );
+
+          messageWidgets.add(messages);
+        }
+        return Expanded(
+          child: ListView(
+            reverse: true,
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            children: messageWidgets,
+          ),
+        );
+      },
+    );
   }
 }
 
-
 class MessageBubble extends StatelessWidget {
-
-  MessageBubble(this.sender, this.text);
+  MessageBubble(this.sender, this.text, this.isMe);
 
   final String sender;
   final String text;
+  final bool isMe;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(10.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text(sender, style: TextStyle(fontSize:  12, color: Colors.black54),),
+          Text(
+            sender,
+            style: TextStyle(fontSize: 12, color: Colors.black54),
+          ),
           Material(
             //adds border
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.only(
+              topLeft: isMe? Radius.circular(30) : Radius.circular(0),
+              topRight: isMe ? Radius.circular(0) : Radius.circular(30),
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
             // elevation adds shadow
             elevation: 5.0,
-            color: Colors.lightBlueAccent,
+            color: isMe ? Colors.black54 : Colors.blueGrey,
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Text(
                 text,
                 style: TextStyle(
-                  fontSize: 15.0,
+                  fontSize: 18.0,
                   color: Colors.white,
                 ),
               ),
